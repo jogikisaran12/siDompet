@@ -90,6 +90,7 @@ public function transactions()
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -113,5 +114,15 @@ public function transactions()
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isUser(): bool
+    {
+        return $this->role === 'user';
     }
 }

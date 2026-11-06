@@ -34,7 +34,8 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'password' => Hash::make($data['password'])
+                'password' => Hash::make($data['password']),
+                'role' => 'user',
             ]);
 
             $categories = [
@@ -66,7 +67,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route($user->isAdmin() ? 'admin.dashboard' : 'dashboard');
     }
 
     public function login(Request $request)
@@ -79,7 +80,8 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('dashboard'));
+            $user = Auth::user();
+            return redirect()->intended($user->isAdmin() ? route('admin.dashboard') : route('dashboard'));
         }
 
         return back()->withErrors([

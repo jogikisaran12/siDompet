@@ -8,7 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\SavingsGoalController;
+use App\Http\Controllers\AdminController;
 
 Route::redirect('/', '/dashboard');
 
@@ -58,4 +58,9 @@ Route::middleware('auth')->group(function () {
     Route::post('savings-goals/{savingsGoal}/withdrawal', [SavingsGoalController::class, 'addWithdrawal'])
         ->name('savings-goals.withdrawal');
 
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
 });
