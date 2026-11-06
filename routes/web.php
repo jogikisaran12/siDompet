@@ -9,6 +9,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SavingsGoalController;
 
 Route::redirect('/', '/dashboard');
 
@@ -63,4 +64,12 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+    Route::patch('/users/{user}/role', [AdminController::class, 'updateUserRole'])->name('users.role');
+    Route::get('/admins', [AdminController::class, 'admins'])->name('admins');
+    Route::get('/admins/create', [AdminController::class, 'createAdmin'])->name('admins.create');
+    Route::post('/admins', [AdminController::class, 'storeAdmin'])->name('admins.store');
+    Route::get('/admins/{user}/edit', [AdminController::class, 'editAdmin'])->name('admins.edit');
+    Route::patch('/admins/{user}', [AdminController::class, 'updateAdmin'])->name('admins.update');
+    Route::patch('/admins/{user}/password', [AdminController::class, 'updateAdminPassword'])->name('admins.password');
 });
